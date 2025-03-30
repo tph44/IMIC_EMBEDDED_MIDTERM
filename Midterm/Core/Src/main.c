@@ -333,6 +333,10 @@ void DMA2_Stream2_IRQHandler() {
   // Clear buffer
   memset(rx_buf, 0, sizeof(rx_buf));
 
+  // Re-enable DMA
+  uint32_t* DMA_S2CR = (uint32_t*) (DMA2_BASE_ADDR + 0x10 + 0x18 * 2);
+  *DMA_S2CR |= 1;
+
   uint32_t* DMA_LIFCR = (uint32_t*)(DMA2_BASE_ADDR + 0x08);
   *DMA_LIFCR |= (1<<21);
 }
@@ -347,7 +351,7 @@ int main() {
   Button_Interrupt_Int();
   Uart_Init();
   Uart_Interrupt_Init();
-  //DMA_Uart1_RX_Init();
+  DMA_Uart1_RX_Init();
   
 
   while(1) {
