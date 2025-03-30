@@ -239,7 +239,7 @@ int main() {
   Led_Init();
   Button_Interrupt_Int();
   uart_init();
-  Uart_Interrupt_Init()
+  Uart_Interrupt_Init();
 
   while(1) {
     Led_Ctrl(GREEN_LED, ON);
