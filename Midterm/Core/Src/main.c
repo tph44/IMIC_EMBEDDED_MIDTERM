@@ -129,17 +129,11 @@ void EXTI0_IRQHandler() {
   *EXTI_PR |= (0b1 << 0);
 }
 
-/*
-
-  GOOD UNTIL THIS PART
-
-*/
-
 // 6. Config UART
 #define GPIOB_BASE_ADDR 0x40020400
 #define USART1_BASE_ADDR 0x40011000
 
-void uart_init()
+void Uart_Init()
 {
 	__HAL_RCC_GPIOB_CLK_ENABLE();
 	__HAL_RCC_USART1_CLK_ENABLE();
@@ -232,13 +226,19 @@ void USART1_IRQHandler() {
     Led_Ctrl(ORANGE_LED, OFF);
 }
 
+/*
+
+  GOOD UNTIL THIS PART
+
+*/
+
 int main() {
 
   HAL_Init();
   Button_Init();
   Led_Init();
   Button_Interrupt_Int();
-  uart_init();
+  Uart_Init();
   Uart_Interrupt_Init();
 
   while(1) {
