@@ -284,6 +284,13 @@ Enable DMAR in UART1_CR3
 char rx_buf[32];
 #define DMA2_BASE_ADDR 0x40026400
 
+void DMA_Interrupt_Init() {
+
+  // NVIC
+  uint32_t* ISER1 = (uint32_t*)(ISER_BASE_ADDR + 0x04);
+  *ISER1 |= (1 << 6); //64-58
+}
+
 void DMA_Uart1_RX_Init() {
 
   uint32_t* USART_CR3  = (uint32_t*)(USART1_BASE_ADDR + 0x14);
@@ -292,7 +299,7 @@ void DMA_Uart1_RX_Init() {
 	__HAL_RCC_DMA2_CLK_ENABLE();
 
 	uint32_t* DMA_S2M0AR = (uint32_t*) (DMA2_BASE_ADDR + 0x1C + 0x18 * 2);
-	*DMA_S2M0AR = (uint32_t) rx_buf;
+	*DMA_S2M0AR = (uint32_t)rx_buf;
 
 	uint32_t* DMA_S2PAR = (uint32_t*) (DMA2_BASE_ADDR + 0x18 + 0x18 * 2);
 	*DMA_S2PAR = 0x40011004;
@@ -306,9 +313,20 @@ void DMA_Uart1_RX_Init() {
 	// Enable increment mode
 	*DMA_S2CR |= 1 << 10;
 
+  // Enable interrupt
+  DMA_Interrupt_Init();
+
 	// ENABLE DMA
 	*DMA_S2CR |= 1;
+}
 
+volatile char recv_completed = 0;
+
+void DMA2_Stream2_IRQHandler() {
+  recv_completed = 1;
+
+  uint32_t* DMA_LIFCR = (uint32_t*)(DMA2_BASE_ADDR + 0x08);
+  *DMA_LIFCR |= (1<<2);
 }
 
 
@@ -320,8 +338,8 @@ int main() {
   Led_Init();
   Button_Interrupt_Int();
   Uart_Init();
-  //Uart_Interrupt_Init();
-  DMA_Uart1_RX_Init();
+  Uart_Interrupt_Init();
+  //DMA_Uart1_RX_Init();
   
 
   while(1) {
