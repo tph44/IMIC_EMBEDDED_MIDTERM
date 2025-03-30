@@ -330,6 +330,9 @@ void DMA2_Stream2_IRQHandler() {
   uart_send_string("\nDMA Interrupt\n");
   recv_completed = 1;
 
+  // Clear buffer
+  memset(rx_buf, 0, sizeof(rx_buf));
+
   uint32_t* DMA_LIFCR = (uint32_t*)(DMA2_BASE_ADDR + 0x08);
   *DMA_LIFCR |= (1<<21);
 }
