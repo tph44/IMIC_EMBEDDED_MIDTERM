@@ -292,7 +292,7 @@ void DMA_Interrupt_Init() {
 
   // NVIC
   uint32_t* ISER1 = (uint32_t*)(ISER_BASE_ADDR + 0x04);
-  *ISER1 |= (1 << 6); //64-58
+  *ISER1 |= (1 << 26); //58-32
 }
 
 void DMA_Uart1_RX_Init() {
@@ -327,6 +327,7 @@ void DMA_Uart1_RX_Init() {
 volatile char recv_completed = 0;
 
 void DMA2_Stream2_IRQHandler() {
+  uart_send_string("\nDMA Interrupt\n");
   recv_completed = 1;
 
   uint32_t* DMA_LIFCR = (uint32_t*)(DMA2_BASE_ADDR + 0x08);
