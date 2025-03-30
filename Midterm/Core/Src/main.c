@@ -331,7 +331,7 @@ void DMA2_Stream2_IRQHandler() {
   recv_completed = 1;
 
   uint32_t* DMA_LIFCR = (uint32_t*)(DMA2_BASE_ADDR + 0x08);
-  *DMA_LIFCR |= (1<<2);
+  *DMA_LIFCR |= (1<<21);
 }
 
 
