@@ -232,16 +232,16 @@ void USART1_IRQHandler() {
   cmd_index++;
   if (strstr(cmd, "\n")) {
     if (strstr(cmd, "led red on")) {
-      Led_Control(RED_LED, ON);
+      Led_Ctrl(RED_LED, ON);
       uart_send_string("Da bat led DO\n");
     } else if (strstr(cmd, "led red off")) {
-      Led_Control(RED_LED, OFF);
+      Led_Ctrl(RED_LED, OFF);
       uart_send_string("Da tat led DO\n");
     } else if (strstr(cmd, "led blue on")) {
-      Led_Control(BLUE_LED, ON);
+      Led_Ctrl(BLUE_LED, ON);
       uart_send_string("Da bat led XANH\n");
     } else if (strstr(cmd, "led red off")) {
-      Led_Control(BLUE_LED, OFF);
+      Led_Ctrl(BLUE_LED, OFF);
       uart_send_string("Da tat led XANH\n");
     } else
       uart_send_string("Khong tiem thay command\n");
