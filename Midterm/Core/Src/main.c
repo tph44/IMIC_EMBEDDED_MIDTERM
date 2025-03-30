@@ -218,12 +218,37 @@ void Uart_Interrupt_Init() {
   
 }
 
+char cmd[32];
+int cmd_index;
+
 void USART1_IRQHandler() {
-	char data = uart_receive_one_byte();
-	if(data == 'x')
-    Led_Ctrl(ORANGE_LED, ON);
-	else if(data == 'o')
-    Led_Ctrl(ORANGE_LED, OFF);
+	// char data = uart_receive_one_byte();
+	// if(data == 'x')
+  //   Led_Ctrl(ORANGE_LED, ON);
+	// else if(data == 'o')
+  //   Led_Ctrl(ORANGE_LED, OFF);
+
+  cmd[cmd_index] = uart_receive_one_byte();
+  cmd_index++;
+  if (strstr(cmd, "\n")) {
+    if (strstr(cmd, "led red on")) {
+      Led_Control(RED_LED, ON);
+      uart_send_string("Da bat led DO\n");
+    } else if (strstr(cmd, "led red off")) {
+      Led_Control(RED_LED, OFF);
+      uart_send_string("Da tat led DO\n");
+    } else if (strstr(cmd, "led blue on")) {
+      Led_Control(BLUE_LED, ON);
+      uart_send_string("Da bat led XANH\n");
+    } else if (strstr(cmd, "led red off")) {
+      Led_Control(BLUE_LED, OFF);
+      uart_send_string("Da tat led XANH\n");
+    } else
+      uart_send_string("Khong tiem thay command\n");
+
+    memset(cmd, 0, 32);
+    cmd_index = 0;
+  }
 }
 
 /*
