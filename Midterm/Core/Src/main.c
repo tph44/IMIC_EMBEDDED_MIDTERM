@@ -286,6 +286,10 @@ char rx_buf[32];
 
 void DMA_Interrupt_Init() {
 
+  // Interrupt enable
+  uint32_t* DMA_S2CR = (uint32_t*) (DMA2_BASE_ADDR + 0x10 + 0x18 * 2);
+  *DMA_S2CR |= 1 << 4;
+
   // NVIC
   uint32_t* ISER1 = (uint32_t*)(ISER_BASE_ADDR + 0x04);
   *ISER1 |= (1 << 6); //64-58
