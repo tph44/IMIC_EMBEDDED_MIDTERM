@@ -197,7 +197,7 @@ char uart_receive_one_byte()
 	return *USART_DR;
 }
 
-/*
+/* 7. UART Interrupt
 khi nhận được uart rx thì UART tại ra interrupt signal để giử xuống NVIC
 NVIC chấp nhận interrupt signal của UART
 
@@ -232,6 +232,62 @@ void USART1_IRQHandler() {
 
 */
 
+/* 8. DMA
+--------------------DMA------------------------
+DMA controller
+
+Look into ref manual
+cần phải xác định là xử dụng DMA nào?
+
+    -> DMA2 -> Stream2 & Channel 4
+    -> DMA_SxCR
+DMA sẽ lấy dữ liệu ở địa chỉ nào để vận chuyển?
+
+    -> DMA_SxPAR
+DMA sẽ vận chuyển dẽ liệu đến địa chỉ nào?
+
+    -> DMA_SxM0AR
+    -> DMA_SxCR ---> Set memory increment mode ON
+Kích thước của dữ liệu là bao nhiêu?
+
+    -> DMA_SxNDRT 
+
+Enable DMAR in UART1_CR3
+
+*/
+
+char rx_buf[32];
+#define DMA2_BASE_ADDR 0x40026400
+
+void DMA_Uart1_RX_Init() {
+
+  uint32_t* USART_CR3  = (uint32_t*)(USART1_BASE_ADDR + 0x14);
+	*USART_CR3 |= 1 << 6;
+
+	__HAL_RCC_DMA2_CLK_ENABLE();
+
+	uint32_t* DMA_S2M0AR = (uint32_t*) (DMA2_BASE_ADDR + 0x1C + 0x18 * 2);
+	*DMA_S2M0AR = (uint32_t) rx_buf;
+
+	uint32_t* DMA_S2PAR = (uint32_t*) (DMA2_BASE_ADDR + 0x18 + 0x18 * 2);
+	*DMA_S2PAR = 0x40011004;
+
+	uint32_t* DMA_S2NDTR = (uint32_t*) (DMA2_BASE_ADDR + 0x14 + 0x18 * 2);
+	*DMA_S2NDTR = sizeof(rx_buf);
+
+	uint32_t* DMA_S2CR = (uint32_t*) (DMA2_BASE_ADDR + 0x10 + 0x18 * 2);
+	*DMA_S2CR |= 4 << 25;
+
+	// Enable increment mode
+	*DMA_S2CR |= 1 << 10;
+
+	// ENABLE DMA
+	*DMA_S2CR |= 1;
+
+}
+
+
+
 int main() {
 
   HAL_Init();
@@ -239,7 +295,9 @@ int main() {
   Led_Init();
   Button_Interrupt_Int();
   Uart_Init();
-  Uart_Interrupt_Init();
+  //Uart_Interrupt_Init();
+  DMA_Uart1_RX_Init();
+  
 
   while(1) {
     Led_Ctrl(GREEN_LED, ON);
