@@ -63,6 +63,8 @@ int GREEN_LED   = 12;
 int ORANGE_LED  = 13;
 int RED_LED     = 14;
 int BLUE_LED    = 15;
+int ON          = 1;
+int OFF         = 0;
 
 void Led_Ctrl(int LED, int OnOff) {
     uint32_t* GPIOD_ODR = (uint32_t*)(GPIOD_BASE_ADDR + 0x14); 
@@ -162,11 +164,11 @@ void uart_init()
 	*USART_CR1 |= (0b1 << 10); // Enable parity
 	*USART_CR1 |= (0b1 << 12); // 9 bits length
 
-	// transmiter, receiver
-	*USART_CR1 |= (0b11 << 2);
-
 	// enable UART
 	*USART_CR1 |= (0b1 << 13);
+
+  // transmiter, receiver
+	*USART_CR1 |= (0b11 << 2);
 }
 
 void uart_send_one_byte(char data)
@@ -201,7 +203,34 @@ char uart_receive_one_byte()
 	return *USART_DR;
 }
 
+/*
+khi nhận được uart rx thì UART tại ra interrupt signal để giử xuống NVIC
+NVIC chấp nhận interrupt signal của UART
 
+    + Set bit RXNEIE (Enable bit 5 của CR1)
+    + UART RX interrupt ở position bao nhiêu? -> Xem vector table -> REFERENCE MANUAL
+        --> position 37
+    + Mở ARM lên xem NESTED VECTOR INTERRUPT TABLE
+        --> bit 5 của ISER1 (0xE000E100 + 4) 
+*/
+
+void Uart_Interrupt_Init() {
+
+  uint32_t* USART_CR1 = (uint32_t*)(USART1_BASE_ADDR + 0x0C);
+  *USART_CR1 |= (0b1 << 5);
+
+  uint32_t* ISER1 = (uint32_t*)(ISER_BASE_ADDR + 0x04);
+  *ISER1 |= (0b1 << 5);
+  
+}
+
+void USART1_IRQHandler() {
+	char data = uart_receive_one_byte();
+	if(data == 'x')
+		Led_Control(ORANGE_LED, ON);
+	else if(data == 'o')
+		Led_Control(ORANGE_LED, OFF);
+}
 
 int main() {
 
@@ -210,18 +239,14 @@ int main() {
   Led_Init();
   Button_Interrupt_Int();
   uart_init();
+  Uart_Interrupt_Init()
 
   while(1) {
-    Led_Ctrl(GREEN_LED, 1);
+    Led_Ctrl(GREEN_LED, ON);
     HAL_Delay(1000);
-    Led_Ctrl(GREEN_LED, 0);
+    Led_Ctrl(GREEN_LED, OFF);
     HAL_Delay(1000);
     uart_send_string("HELLO\n");
-
-    if (uart_receive_one_byte() == "x")
-      Led_Ctrl(ORANGE_LED, 1);
-    else if (uart_receive_one_byte() == "o")
-      Led_Ctrl(ORANGE_LED, 0);
 
 
   }
