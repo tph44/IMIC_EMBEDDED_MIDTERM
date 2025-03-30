@@ -227,9 +227,9 @@ void Uart_Interrupt_Init() {
 void USART1_IRQHandler() {
 	char data = uart_receive_one_byte();
 	if(data == 'x')
-		Led_Control(ORANGE_LED, ON);
+    Led_Ctrl(ORANGE_LED, ON);
 	else if(data == 'o')
-		Led_Control(ORANGE_LED, OFF);
+    Led_Ctrl(ORANGE_LED, OFF);
 }
 
 int main() {
