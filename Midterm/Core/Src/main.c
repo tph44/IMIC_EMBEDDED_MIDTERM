@@ -342,6 +342,92 @@ void DMA2_Stream2_IRQHandler() {
   *DMA_S2CR |= 1;
 }
 
+/* 8. Memory
+
+  Use Embedded Flash memory
+
+  Flash is composed of 8 sectors (0~7)
+
+    Erase data before write!!!! <- MUST (Unlike Ram allows overwrite)
+
+  Tasks:
+    1. ERASE opeartion
+      ** Cannot erase in byte -> ERASE WHOLE SECTOR or WHOLE!!!
+      input:  
+        int sector_number
+      output: NONE
+
+    2. PROGRAM operation
+      ** Can write in byte
+      Input:
+        char* addr 
+        char* data
+        int size
+      Output: NONE  
+*/
+
+#define FLASH_BASE_ADDR 0x40023C00
+#define KEY1            0x45670123
+#define KEY2            0xCDEF89AB
+
+void Flash_Erase(int sector_number) {
+
+  // 0. Check to see if FLASH_CR is locked or not
+  uint32_t* FL_CR = (uint32_t)*(FLASH_BASE_ADDR + 0x10);
+  if (((*FL_CR >> 31) & 1) == 1) {
+    // unlock FLASH_CR by unlock sequence
+    uint32_t* FL_KEYR = (uint32_t)*(FLASH_BASE_ADDR + 0x4);
+    *FL_KEYR = KEY1;
+    *FL_KEYR = KEY2;
+  }
+
+  // 1. Check to see if any onging opeartion on Flash
+  uint32_t* FL_SR = (uint32_t)*(FLASH_BASE_ADDR + 0x0C);
+  
+  while (((*FL_SR >> 16) & 1) == 1);
+  
+
+  // 2. Set SER bit and select the sector in FLASH_CR regiser
+  *FL_CR &= ~(0b1111 << 3);
+  *FL_CR |= (sector_number << 3);
+  *FL_CR |= (0b1 << 1);
+
+  // 3. Set the STRT bit in the FLASH_CR register
+  *FL_CR |= (0b1 << 16);
+
+  // 4. Wait for the BSY bit to be cleared
+  while (((*FL_SR >> 16 ) & 1) == 1);
+}
+
+void Flash_Program(char* flash_addr, char* data_addr, int size) {
+
+  // 0. Check to see if FLASH_CR is locked or not
+  uint32_t* FL_CR = (uint32_t)*(FLASH_BASE_ADDR + 0x10);
+  if (((*FL_CR >> 31) & 1) == 1) {
+    // unlock FLASH_CR by unlock sequence
+    uint32_t* FL_KEYR = (uint32_t)*(FLASH_BASE_ADDR + 0x4);
+    *FL_KEYR = KEY1;
+    *FL_KEYR = KEY2;
+  }
+
+  // 1. Check BSY bit to see if any ongoing operation
+  uint32_t* FL_SR = (uint32_t)*(FLASH_BASE_ADDR + 0x0C);
+  
+  while (((*FL_SR >> 16) & 1) == 1);
+
+  // 2. Set the PG bit in the FLASH_CR register
+  *FL_CR |= (0b1 << 0);
+
+  // 3. Perform the data write operation(s)
+  for (int i = 0; i < size; i++) {
+    flash_addr[i] = data_addr[i];
+  }
+
+  // 4. Wait for the BSY bit to be cleared
+  while (((*FL_SR >> 16 ) & 1) == 1);
+}
+
+
 
 
 int main() {
