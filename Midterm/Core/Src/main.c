@@ -377,8 +377,8 @@ void Flash_Erase(int sector_number) {
   if (((*FL_CR >> 31) & 1) == 1) {
     // unlock FLASH_CR by unlock sequence
     uint32_t* FL_KEYR = (uint32_t*)(FLASH_BASE_ADDR + 0x4);
-    *FL_KEYR = KEY1;
-    *FL_KEYR = KEY2;
+    *FL_KEYR = 0x45670123;
+    *FL_KEYR = 0xCDEF89AB;
   }
 
   // 1. Check to see if any onging opeartion on Flash
@@ -420,7 +420,8 @@ void Flash_Program(char* flash_addr, char* data_addr, int size) {
 
   // 3. Perform the data write operation(s)
   for (int i = 0; i < size; i++) {
-    flash_addr[i] = data_addr[i];
+    //flash_addr[i] = data_addr[i];
+    *(flash_addr+i) = *(data_addr+i);
   }
 
   // 4. Wait for the BSY bit to be cleared
@@ -439,7 +440,9 @@ int main() {
   Uart_Init();
   //Uart_Interrupt_Init();
   DMA_Uart1_RX_Init();
-  //Flash_Erase(1);
+  Flash_Erase(1);
+  char msg[] = "Hello World!\n";
+  Flash_Program((char*)0x08004000, msg, sizeof(msg));
   
 
   while(1) {
