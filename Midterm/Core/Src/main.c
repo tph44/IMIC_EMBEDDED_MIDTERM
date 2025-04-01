@@ -373,16 +373,16 @@ void DMA2_Stream2_IRQHandler() {
 void Flash_Erase(int sector_number) {
 
   // 0. Check to see if FLASH_CR is locked or not
-  uint32_t* FL_CR = (uint32_t)*(FLASH_BASE_ADDR + 0x10);
+  uint32_t* FL_CR = (uint32_t*)(FLASH_BASE_ADDR + 0x10);
   if (((*FL_CR >> 31) & 1) == 1) {
     // unlock FLASH_CR by unlock sequence
-    uint32_t* FL_KEYR = (uint32_t)*(FLASH_BASE_ADDR + 0x4);
+    uint32_t* FL_KEYR = (uint32_t*)(FLASH_BASE_ADDR + 0x4);
     *FL_KEYR = KEY1;
     *FL_KEYR = KEY2;
   }
 
   // 1. Check to see if any onging opeartion on Flash
-  uint32_t* FL_SR = (uint32_t)*(FLASH_BASE_ADDR + 0x0C);
+  uint32_t* FL_SR = (uint32_t*)(FLASH_BASE_ADDR + 0x0C);
   
   while (((*FL_SR >> 16) & 1) == 1);
   
@@ -402,16 +402,16 @@ void Flash_Erase(int sector_number) {
 void Flash_Program(char* flash_addr, char* data_addr, int size) {
 
   // 0. Check to see if FLASH_CR is locked or not
-  uint32_t* FL_CR = (uint32_t)*(FLASH_BASE_ADDR + 0x10);
+  uint32_t* FL_CR = (uint32_t*)(FLASH_BASE_ADDR + 0x10);
   if (((*FL_CR >> 31) & 1) == 1) {
     // unlock FLASH_CR by unlock sequence
-    uint32_t* FL_KEYR = (uint32_t)*(FLASH_BASE_ADDR + 0x4);
+    uint32_t* FL_KEYR = (uint32_t*)(FLASH_BASE_ADDR + 0x4);
     *FL_KEYR = KEY1;
     *FL_KEYR = KEY2;
   }
 
   // 1. Check BSY bit to see if any ongoing operation
-  uint32_t* FL_SR = (uint32_t)*(FLASH_BASE_ADDR + 0x0C);
+  uint32_t* FL_SR = (uint32_t*)(FLASH_BASE_ADDR + 0x0C);
   
   while (((*FL_SR >> 16) & 1) == 1);
 
@@ -439,6 +439,7 @@ int main() {
   Uart_Init();
   //Uart_Interrupt_Init();
   DMA_Uart1_RX_Init();
+  //Flash_Erase(1);
   
 
   while(1) {
