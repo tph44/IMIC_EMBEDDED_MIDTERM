@@ -56,6 +56,9 @@ default.size.stdout \
 OBJDUMP_LIST += \
 Firmware_1.list \
 
+OBJCOPY_BIN += \
+Firmware_1.bin \
+
 
 # All Target
 all: main-build
@@ -79,12 +82,17 @@ Firmware_1.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
+Firmware_1.bin: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "Firmware_1.bin"
+	@echo 'Finished building: $@'
+	@echo ' '
+
 # Other Targets
 clean:
-	-$(RM) Firmware_1.elf Firmware_1.list Firmware_1.map default.size.stdout
+	-$(RM) Firmware_1.bin Firmware_1.elf Firmware_1.list Firmware_1.map default.size.stdout
 	-@echo ' '
 
-secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
+secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_BIN)
 
 fail-specified-linker-script-missing:
 	@echo 'Error: Cannot find the specified linker script. Check the linker settings in the build configuration.'
