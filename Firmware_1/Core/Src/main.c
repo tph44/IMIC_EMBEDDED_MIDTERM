@@ -120,18 +120,190 @@ void Button_Interrupt_Int() {
   
 }
 
+void EXTI0_IRQHandler() {
+
+  Led_Ctrl(RED_LED, Button_Status());
+
+  // Clear interrupt flag to exit handler function
+  uint32_t* EXTI_PR = (uint32_t*)(EXTI_BASE_ADDR + 0x14);
+  *EXTI_PR |= (0b1 << 0);
+}
+
+// 6. Config UART
+#define GPIOB_BASE_ADDR 0x40020400
+#define USART1_BASE_ADDR 0x40011000
+
+void Uart_Init()
+{
+	__HAL_RCC_GPIOB_CLK_ENABLE();
+	__HAL_RCC_USART1_CLK_ENABLE();
+	uint32_t* GPIOB_MODER = (uint32_t*)(GPIOB_BASE_ADDR + 0x00);
+	uint32_t* GPIOB_AFRL  = (uint32_t*)(GPIOB_BASE_ADDR + 0x20);
+	uint32_t* USART_BRR  = (uint32_t*)(USART1_BASE_ADDR + 0x08);
+	uint32_t* USART_CR1  = (uint32_t*)(USART1_BASE_ADDR + 0x0C);
+
+
+	*GPIOB_MODER &= ~(0b1111 << 12); // CLEAR
+	*GPIOB_MODER |= (0b1010 << 12);
+
+	*GPIOB_AFRL	&= ~(0xff << 24);
+	*GPIOB_AFRL	|= (0b01110111 << 24);
+
+	// set baud rate ~ 9600 -> UARTDIV = 104.16667 -> mantissa = 104 & fraction = 0.16667 * 16 = 3
+	*USART_BRR &= ~(0xffff << 0);
+	*USART_BRR |= (3 << 0);
+	*USART_BRR |= (104 << 4);
+
+	// data frame
+	*USART_CR1 |= (0b1 << 10); // Enable parity
+	*USART_CR1 |= (0b1 << 12); // 9 bits length
+
+	// enable UART
+	*USART_CR1 |= (0b1 << 13);
+
+  // transmiter, receiver
+	*USART_CR1 |= (0b11 << 2);
+}
+
+void uart_send_one_byte(char data)
+{
+	uint32_t* USART_SR = (uint32_t*)(USART1_BASE_ADDR + 0x00);
+	uint32_t* USART_DR = (uint32_t*)(USART1_BASE_ADDR + 0x04);
+	// wait for TXE == 1
+	while (((*USART_SR >> 7) & 1) == 0);
+
+	*USART_DR = data;
+
+	while (((*USART_SR >> 6) & 1) == 0);
+}
+
+void uart_send_string(char* str)
+{
+
+	// Get size of string
+	int size;
+	size = strlen(str);
+
+	for (int i = 0; i < size; i++)
+		uart_send_one_byte(str[i]);
+}
+
+char uart_receive_one_byte()
+{
+	uint32_t* USART_SR = (uint32_t*)(USART1_BASE_ADDR + 0x00);
+	uint32_t* USART_DR = (uint32_t*)(USART1_BASE_ADDR + 0x04);
+	// wait for RxNE == 1
+	while (((*USART_SR >> 5) & 1) == 0);
+	return *USART_DR;
+}
+
+#define FLASH_BASE_ADDR 0x40023C00
+#define KEY1            0x45670123
+#define KEY2            0xCDEF89AB
+
+void Flash_Erase(int sector_number) {
+
+  // 0. Check to see if FLASH_CR is locked or not
+  uint32_t* FL_CR = (uint32_t*)(FLASH_BASE_ADDR + 0x10);
+  if (((*FL_CR >> 31) & 1) == 1) {
+    // unlock FLASH_CR by unlock sequence
+    uint32_t* FL_KEYR = (uint32_t*)(FLASH_BASE_ADDR + 0x4);
+    *FL_KEYR = 0x45670123;
+    *FL_KEYR = 0xCDEF89AB;
+  }
+
+  // 1. Check to see if any onging opeartion on Flash
+  uint32_t* FL_SR = (uint32_t*)(FLASH_BASE_ADDR + 0x0C);
+  
+  while (((*FL_SR >> 16) & 1) == 1);
+  
+
+  // 2. Set SER bit and select the sector in FLASH_CR regiser
+  *FL_CR &= ~(0b1111 << 3);
+  *FL_CR |= (sector_number << 3);
+  *FL_CR |= (0b1 << 1);
+
+  // 3. Set the STRT bit in the FLASH_CR register
+  *FL_CR |= (0b1 << 16);
+
+  // 4. Wait for the BSY bit to be cleared
+  while (((*FL_SR >> 16 ) & 1) == 1);
+}
+
+void Flash_Program(char* flash_addr, char* data_addr, int size) {
+
+  // 0. Check to see if FLASH_CR is locked or not
+  uint32_t* FL_CR = (uint32_t*)(FLASH_BASE_ADDR + 0x10);
+  if (((*FL_CR >> 31) & 1) == 1) {
+    // unlock FLASH_CR by unlock sequence
+    uint32_t* FL_KEYR = (uint32_t*)(FLASH_BASE_ADDR + 0x4);
+    *FL_KEYR = KEY1;
+    *FL_KEYR = KEY2;
+  }
+
+  // 1. Check BSY bit to see if any ongoing operation
+  uint32_t* FL_SR = (uint32_t*)(FLASH_BASE_ADDR + 0x0C);
+  
+  while (((*FL_SR >> 16) & 1) == 1);
+
+  // 2. Set the PG bit in the FLASH_CR register
+  *FL_CR |= (0b1 << 0);
+
+  // 3. Perform the data write operation(s)
+  for (int i = 0; i < size; i++) {
+    //flash_addr[i] = data_addr[i];
+    *(flash_addr+i) = *(data_addr+i);
+  }
+
+  // 4. Wait for the BSY bit to be cleared
+  while (((*FL_SR >> 16 ) & 1) == 1);
+}
+
+// bootloader
+void current_firmware_init(uint32_t* firmware_addr) {
+  uint32_t* reset_hander_address_pointer;
+  reset_hander_address_pointer = firmware_addr;
+ 
+  uint32_t reset_hander_address = *reset_hander_address_pointer;
+ 
+  void (*hander)();
+  hander = reset_hander_address;
+  hander();
+}
+
+
+void rec_firmware() {
+  char new_fw[10516];
+
+  uart_send_string("Vui long gui firmware...\n");
+
+  for (int i = 0; i < sizeof(new_fw); i++) {
+    new_fw[i] = uart_receive_one_byte();
+  }
+
+  uart_send_string("Da nhan duoc firmware...\n");
+  Flash_Erase(6);
+  Flash_Program((char*)0x08040000, new_fw, sizeof(new_fw));
+
+  char fw_msg[] = "New firmware received!\n";
+	Flash_Erase(4);
+	Flash_Program((char*)0x08010000, fw_msg, sizeof(fw_msg));
+}
+
+
 int main() {
 
   HAL_Init();
   Button_Init();
   Led_Init();
   Button_Interrupt_Int();
+  Uart_Init();
 
+
+  rec_firmware();
   while(1) {
-    Led_Ctrl(BLUE_LED, ON);
-    HAL_Delay(1000);
-    Led_Ctrl(BLUE_LED, OFF);
-    HAL_Delay(1000);
+
+    current_firmware_init((uint32_t*)0x08040004);
   }
 
   return 0;

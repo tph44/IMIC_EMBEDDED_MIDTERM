@@ -428,8 +428,95 @@ void Flash_Program(char* flash_addr, char* data_addr, int size) {
   while (((*FL_SR >> 16 ) & 1) == 1);
 }
 
+void Flash_Read(uint8_t* data, int sector_number) {
+  uint32_t read_data_buffer;
+  uint32_t read_cnt = 0;
+  char* flash_addr;
+ 
+  switch (sector_number) {
+    case 0:
+      flash_addr = (char*)0x08000000;
+      break;
+ 
+    case 1:
+      flash_addr = (char*)0x08004000;
+      break;
+ 
+    case 2:
+      flash_addr = (char*)0x08008000;
+      break;
+ 
+    case 3:
+      flash_addr = (char*)0x0800C000;
+      break;
+ 
+    case 4:
+      flash_addr = (char*)0x08010000;
+      break;
+ 
+    case 5:
+      flash_addr = (char*)0x08020000;
+      break;
+ 
+    case 6:
+      flash_addr = (char*)0x08040000;
+      break;
+ 
+    case 7:
+      flash_addr = (char*)0x08060000;
+      break;
+ 
+    default:
+      flash_addr = (char*)0x08000000;
+  }
+ 
+  do {
+    read_data_buffer = *(uint32_t*)(flash_addr + read_cnt);
+ 
+    if (read_data_buffer != 0xFFFFFFFF) {
+      data[read_cnt] 		  = (uint8_t)read_data_buffer;
+      data[read_cnt+1] 		= (uint8_t)(read_data_buffer >> 8);
+      data[read_cnt+2] 		= (uint8_t)(read_data_buffer >> 16);
+      data[read_cnt+3] 		= (uint8_t)(read_data_buffer >> 24);
+      read_cnt += 4;
+    }
+  } while(read_data_buffer != 0xFFFFFFFF);
+}
+
+// bootloader
+void current_firmware_init(uint32_t* firmware_addr) {
+ uint32_t* reset_hander_address_pointer;
+ reset_hander_address_pointer = firmware_addr;
+
+ uint32_t reset_hander_address = *reset_hander_address_pointer;
+
+ void (*hander)();
+ hander = reset_hander_address;
+ hander();
+}
+
+int check_info(char* msg_check) {
+ int status = 0;
+ char msg_rec[sizeof(msg_check)];
+
+ memset(msg_rec, 0 , sizeof(msg_rec));
+ Flash_Read((uint8_t*)msg_rec, 4);
+
+ if (strstr(msg_rec, "\n")) {
+   if (strstr((char*)msg_rec, msg_check)) {
+     status = 1;
+     uart_send_string("Da nhan du firmware\n");
+   } else {
+     uart_send_string("Firmware COOKED!\n");
+   }
+ }
+
+ memset(msg_rec, 0, sizeof(msg_rec));
+ return status;
+}
 
 
+//char new_fw[10516];
 
 int main() {
 
@@ -438,19 +525,32 @@ int main() {
   Led_Init();
   Button_Interrupt_Int();
   Uart_Init();
-  //Uart_Interrupt_Init();
-  DMA_Uart1_RX_Init();
-  Flash_Erase(1);
-  char msg[] = "Hello World!\n";
-  Flash_Program((char*)0x08004000, msg, sizeof(msg));
+//Uart_Interrupt_Init();
+//DMA_Uart1_RX_Init();
+//Flash_Erase(1);
+//char msg[] = "Hello World!\n";
+//Flash_Program((char*)0x08004000, msg, sizeof(msg));
+
+  // uart_send_string("Vui long gui firmware...\n");
+
+  // for (int i = 0; i < sizeof(new_fw); i++) {
+  //   new_fw[i] = uart_receive_one_byte();
+  //   count = i;
+  // }
+
+  // uart_send_string("Da nhan duoc firmware...\n");
+  // Flash_Erase(6);
+  // Flash_Program((char*)0x08040000, new_fw, sizeof(new_fw));
   
 
   while(1) {
-    Led_Ctrl(GREEN_LED, ON);
-    HAL_Delay(1000);
-    Led_Ctrl(GREEN_LED, OFF);
-    HAL_Delay(1000);
-    uart_send_string("HELLO\n");
+    // Led_Ctrl(GREEN_LED, ON);
+    // HAL_Delay(1000);
+    // Led_Ctrl(GREEN_LED, OFF);
+    // HAL_Delay(1000);
+    // uart_send_string("HELLO\n");
+
+    current_firmware_init((uint32_t*)0x08020004);
 
 
   }

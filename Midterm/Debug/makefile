@@ -64,8 +64,8 @@ all: main-build
 main-build: Midterm.elf secondary-outputs
 
 # Tool invocations
-Midterm.elf Midterm.map: $(OBJS) $(USER_OBJS) C:\Users\Truong\STM32CubeIDE\IMIC\Midterm\STM32F411VETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Midterm.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Truong\STM32CubeIDE\IMIC\Midterm\STM32F411VETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Midterm.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Midterm.elf Midterm.map: $(OBJS) $(USER_OBJS) C:\Users\Truong\STM32CubeIDE\IMIC\IMIC_EMBEDDED_MIDTERM\Midterm\STM32F411VETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Midterm.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Truong\STM32CubeIDE\IMIC\IMIC_EMBEDDED_MIDTERM\Midterm\STM32F411VETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Midterm.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

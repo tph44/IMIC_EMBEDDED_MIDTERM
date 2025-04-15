@@ -1,21 +1,7 @@
 #include "main.h"
 #include <string.h>
-// 1 - Config button
-/*
-    PA0 -> PA15 are controlled by GPIOA
 
-    From schematic, we know PA0 is USER & Wake-up Button
-
-    From data sheet, we know GPIOA_BASE_ADDR is at 0x40020000
-
-    From ref manual - stm32, we know 
-        GPIOA_MODER 
-            -- offset addr is 0
-            -- 00 is input mode
-*/
-
-
-#define GPIOA_BASE_ADDR 0x40020000 
+#define GPIOA_BASE_ADDR 0x40020000
 
 void Button_Init() {
 
@@ -24,22 +10,9 @@ void Button_Init() {
 
     // 2. Set PA0 as input
     uint32_t* GPIOA_MODER = (uint32_t*)(GPIOA_BASE_ADDR + 0x00);
-    *GPIOA_MODER &= ~(0b11 << 0); 
+    *GPIOA_MODER &= ~(0b11 << 0);
 }
 
-// 2 - Config LED
-/*
-    PA0 -> PA15 are controlled by GPIOA
-
-    From schematic, we know PD12, PD13, PD14, and PD15 are LED_GREEN, ORANGE_GREEN, RED_GREEN, and BLUE_GREEN respectively
-
-    From data sheet, we know GPIOD_BASE_ADDR is at 0x40020C00
-
-    From ref manual - stm32, we know 
-        GPIOD_MODER 
-            -- offset addr is 0
-            -- 01 is output mode
-*/
 #define GPIOD_BASE_ADDR 0x40020C00 // Get addr from  Data sheet <- Memory mapping
 
 void Led_Init() {
@@ -52,13 +25,6 @@ void Led_Init() {
     *GPIOD_MODER |= (0b01010101 << 24); // Set
 }
 
-// 3 - Control LED
-/*
-    From ref manual - stm32, we know 
-        GPIOD_ODR 
-            -- offset addr is 14
-            -- Output data register  
-*/
 int GREEN_LED   = 12;
 int ORANGE_LED  = 13;
 int RED_LED     = 14;
@@ -81,19 +47,8 @@ int Button_Status() {
     return (*GPIOA_IDR >> 0) & 1;
 }
 
-// 5 - Config button interrupt
-/*
-  EXTI - External Interrupt
-
-  From data sheet, we know GPIOA_BASE_ADDR is at 0x40013C0
-
-  From ref manual - stm32, we know 
-
-  Why EXTI0????
-
-*/
 #define EXTI_BASE_ADDR 0x40013C00
-#define ISER_BASE_ADDR 0xE000E100 // From ref manual - M4 
+#define ISER_BASE_ADDR 0xE000E100 // From ref manual - M4
 
 void Button_Interrupt_Int() {
 
@@ -117,21 +72,33 @@ void Button_Interrupt_Int() {
   */
   uint32_t* ISER0 = (uint32_t*)(ISER_BASE_ADDR + 0x00);
   *ISER0 |= (0b1 << 6);
-  
+
+}
+
+void EXTI0_IRQHandler() {
+
+  Led_Ctrl(GREEN_LED, Button_Status());
+
+  // Clear interrupt flag to exit handler function
+  uint32_t* EXTI_PR = (uint32_t*)(EXTI_BASE_ADDR + 0x14);
+  *EXTI_PR |= (0b1 << 0);
 }
 
 int main() {
 
-  HAL_Init();
+//HAL_Init();
   Button_Init();
   Led_Init();
   Button_Interrupt_Int();
 
+
+
+
   while(1) {
-    Led_Ctrl(RED_LED, ON);
-    HAL_Delay(1000);
-    Led_Ctrl(RED_LED, OFF);
-    HAL_Delay(1000);
+    //  Led_Ctrl(RED_LED, ON);
+    //  HAL_Delay(1000);
+    //  Led_Ctrl(RED_LED, OFF);
+    //  HAL_Delay(1000);
   }
 
   return 0;
