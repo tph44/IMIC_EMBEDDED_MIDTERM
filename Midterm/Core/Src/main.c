@@ -135,66 +135,66 @@ void EXTI0_IRQHandler() {
 
 void Uart_Init()
 {
-	__HAL_RCC_GPIOB_CLK_ENABLE();
-	__HAL_RCC_USART1_CLK_ENABLE();
-	uint32_t* GPIOB_MODER = (uint32_t*)(GPIOB_BASE_ADDR + 0x00);
-	uint32_t* GPIOB_AFRL  = (uint32_t*)(GPIOB_BASE_ADDR + 0x20);
-	uint32_t* USART_BRR  = (uint32_t*)(USART1_BASE_ADDR + 0x08);
-	uint32_t* USART_CR1  = (uint32_t*)(USART1_BASE_ADDR + 0x0C);
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_USART1_CLK_ENABLE();
+  uint32_t* GPIOB_MODER = (uint32_t*)(GPIOB_BASE_ADDR + 0x00);
+  uint32_t* GPIOB_AFRL  = (uint32_t*)(GPIOB_BASE_ADDR + 0x20);
+  uint32_t* USART_BRR  = (uint32_t*)(USART1_BASE_ADDR + 0x08);
+  uint32_t* USART_CR1  = (uint32_t*)(USART1_BASE_ADDR + 0x0C);
 
 
-	*GPIOB_MODER &= ~(0b1111 << 12); // CLEAR
-	*GPIOB_MODER |= (0b1010 << 12);
+  *GPIOB_MODER &= ~(0b1111 << 12); // CLEAR
+  *GPIOB_MODER |= (0b1010 << 12);
 
-	*GPIOB_AFRL	&= ~(0xff << 24);
-	*GPIOB_AFRL	|= (0b01110111 << 24);
+  *GPIOB_AFRL	&= ~(0xff << 24);
+  *GPIOB_AFRL	|= (0b01110111 << 24);
 
-	// set baud rate ~ 9600 -> UARTDIV = 104.16667 -> mantissa = 104 & fraction = 0.16667 * 16 = 3
-	*USART_BRR &= ~(0xffff << 0);
-	*USART_BRR |= (3 << 0);
-	*USART_BRR |= (104 << 4);
+  // set baud rate ~ 9600 -> UARTDIV = 104.16667 -> mantissa = 104 & fraction = 0.16667 * 16 = 3
+  *USART_BRR &= ~(0xffff << 0);
+  *USART_BRR |= (3 << 0);
+  *USART_BRR |= (104 << 4);
 
-	// data frame
-	*USART_CR1 |= (0b1 << 10); // Enable parity
-	*USART_CR1 |= (0b1 << 12); // 9 bits length
+  // data frame
+  *USART_CR1 |= (0b1 << 10); // Enable parity
+  *USART_CR1 |= (0b1 << 12); // 9 bits length
 
-	// enable UART
-	*USART_CR1 |= (0b1 << 13);
+  // enable UART
+  *USART_CR1 |= (0b1 << 13);
 
   // transmiter, receiver
-	*USART_CR1 |= (0b11 << 2);
+  *USART_CR1 |= (0b11 << 2);
 }
 
 void uart_send_one_byte(char data)
 {
-	uint32_t* USART_SR = (uint32_t*)(USART1_BASE_ADDR + 0x00);
-	uint32_t* USART_DR = (uint32_t*)(USART1_BASE_ADDR + 0x04);
-	// wait for TXE == 1
-	while (((*USART_SR >> 7) & 1) == 0);
+  uint32_t* USART_SR = (uint32_t*)(USART1_BASE_ADDR + 0x00);
+  uint32_t* USART_DR = (uint32_t*)(USART1_BASE_ADDR + 0x04);
+  // wait for TXE == 1
+  while (((*USART_SR >> 7) & 1) == 0);
 
-	*USART_DR = data;
+  *USART_DR = data;
 
-	while (((*USART_SR >> 6) & 1) == 0);
+  while (((*USART_SR >> 6) & 1) == 0);
 }
 
 void uart_send_string(char* str)
 {
 
-	// Get size of string
-	int size;
-	size = strlen(str);
+  // Get size of string
+  int size;
+  size = strlen(str);
 
-	for (int i = 0; i < size; i++)
-		uart_send_one_byte(str[i]);
+  for (int i = 0; i < size; i++)
+    uart_send_one_byte(str[i]);
 }
 
 char uart_receive_one_byte()
 {
-	uint32_t* USART_SR = (uint32_t*)(USART1_BASE_ADDR + 0x00);
-	uint32_t* USART_DR = (uint32_t*)(USART1_BASE_ADDR + 0x04);
-	// wait for RxNE == 1
-	while (((*USART_SR >> 5) & 1) == 0);
-	return *USART_DR;
+  uint32_t* USART_SR = (uint32_t*)(USART1_BASE_ADDR + 0x00);
+  uint32_t* USART_DR = (uint32_t*)(USART1_BASE_ADDR + 0x04);
+  // wait for RxNE == 1
+  while (((*USART_SR >> 5) & 1) == 0);
+  return *USART_DR;
 }
 
 /* 7. UART Interrupt
@@ -222,10 +222,10 @@ char cmd[32];
 int cmd_index;
 
 void USART1_IRQHandler() {
-	// char data = uart_receive_one_byte();
-	// if(data == 'x')
+  // char data = uart_receive_one_byte();
+  // if(data == 'x')
   //   Led_Ctrl(ORANGE_LED, ON);
-	// else if(data == 'o')
+  // else if(data == 'o')
   //   Led_Ctrl(ORANGE_LED, OFF);
 
   cmd[cmd_index] = uart_receive_one_byte();
@@ -298,30 +298,30 @@ void DMA_Interrupt_Init() {
 void DMA_Uart1_RX_Init() {
 
   uint32_t* USART_CR3  = (uint32_t*)(USART1_BASE_ADDR + 0x14);
-	*USART_CR3 |= 1 << 6;
+  *USART_CR3 |= 1 << 6;
 
-	__HAL_RCC_DMA2_CLK_ENABLE();
+  __HAL_RCC_DMA2_CLK_ENABLE();
 
-	uint32_t* DMA_S2M0AR = (uint32_t*) (DMA2_BASE_ADDR + 0x1C + 0x18 * 2);
-	*DMA_S2M0AR = (uint32_t)rx_buf;
+  uint32_t* DMA_S2M0AR = (uint32_t*) (DMA2_BASE_ADDR + 0x1C + 0x18 * 2);
+  *DMA_S2M0AR = (uint32_t)rx_buf;
 
-	uint32_t* DMA_S2PAR = (uint32_t*) (DMA2_BASE_ADDR + 0x18 + 0x18 * 2);
-	*DMA_S2PAR = 0x40011004;
+  uint32_t* DMA_S2PAR = (uint32_t*) (DMA2_BASE_ADDR + 0x18 + 0x18 * 2);
+  *DMA_S2PAR = 0x40011004;
 
-	uint32_t* DMA_S2NDTR = (uint32_t*) (DMA2_BASE_ADDR + 0x14 + 0x18 * 2);
-	*DMA_S2NDTR = sizeof(rx_buf);
+  uint32_t* DMA_S2NDTR = (uint32_t*) (DMA2_BASE_ADDR + 0x14 + 0x18 * 2);
+  *DMA_S2NDTR = sizeof(rx_buf);
 
-	uint32_t* DMA_S2CR = (uint32_t*) (DMA2_BASE_ADDR + 0x10 + 0x18 * 2);
-	*DMA_S2CR |= 4 << 25;
+  uint32_t* DMA_S2CR = (uint32_t*) (DMA2_BASE_ADDR + 0x10 + 0x18 * 2);
+  *DMA_S2CR |= 4 << 25;
 
-	// Enable increment mode
-	*DMA_S2CR |= 1 << 10;
+  // Enable increment mode
+  *DMA_S2CR |= 1 << 10;
 
   // Enable interrupt
   DMA_Interrupt_Init();
 
-	// ENABLE DMA
-	*DMA_S2CR |= 1;
+  // ENABLE DMA
+  *DMA_S2CR |= 1;
 }
 
 volatile char recv_completed = 0;
@@ -509,6 +509,8 @@ void swap_fw_func() {
   Flash_Erase(5);
   Flash_Program((char*)0x08020000, swap_fw, sizeof(swap_fw));
 
+  uart_send_string("Firmwares SWAPPED!\n");
+
 }
 
 
@@ -540,7 +542,7 @@ char fw_msg[] = "New firmware received!\n";
 
 int main() {
 
- //HAL_Init();
+ HAL_Init();
   Button_Init();
   Led_Init();
   Button_Interrupt_Int();
@@ -564,10 +566,10 @@ int main() {
   
 
   while(1) {
-    // Led_Ctrl(GREEN_LED, ON);
-    // HAL_Delay(1000);
-    // Led_Ctrl(GREEN_LED, OFF);
-    // HAL_Delay(1000);
+//     Led_Ctrl(BLUE_LED, ON);
+//     HAL_Delay(1000);
+//     Led_Ctrl(BLUE_LED, OFF);
+//     HAL_Delay(1000);
     // uart_send_string("HELLO\n");
 
 
@@ -576,10 +578,10 @@ int main() {
 //	else
 //		current_firmware_init((uint32_t*)0x08020004);
 
-	if (check_info(fw_msg))
+  if (check_info(fw_msg))
     swap_fw_func();
 
-	current_firmware_init((uint32_t*)0x08020004);
+  current_firmware_init((uint32_t*)0x08020004);
 
 
   }
