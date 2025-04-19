@@ -47,7 +47,7 @@ void Led_Init() {
     __HAL_RCC_GPIOD_CLK_ENABLE();
 
     // 2. Set PD12, PD13, PD14 and PD15 as outputs - Get PD numbers from schematic
-    uint32_t* GPIOD_MODER = (uint32_t*)(GPIOD_BASE_ADDR + 0x00); 
+    uint32_t* GPIOD_MODER = (uint32_t*)(GPIOD_BASE_ADDR + 0x00);
     *GPIOD_MODER &= (0b11111111 << 24); // Clear
     *GPIOD_MODER |= (0b01010101 << 24); // Set
 }
@@ -67,11 +67,11 @@ int ON          = 1;
 int OFF         = 0;
 
 void Led_Ctrl(int LED, int OnOff) {
-    uint32_t* GPIOD_ODR = (uint32_t*)(GPIOD_BASE_ADDR + 0x14); 
+    uint32_t* GPIOD_ODR = (uint32_t*)(GPIOD_BASE_ADDR + 0x14);
 
     if (OnOff == 1)
         *GPIOD_ODR |=  (0b1 << LED);
-    else 
+    else
         *GPIOD_ODR &= ~(0b1 << LED);
 }
 
@@ -429,9 +429,9 @@ void Flash_Program(char* flash_addr, char* data_addr, int size) {
 }
 
 void Flash_Read(uint8_t* data, int sector_number) {
-  uint32_t read_data_buffer;
-  uint32_t read_cnt = 0;
-  char* flash_addr;
+  volatile uint32_t read_data_buffer;
+  volatile uint32_t read_cnt = 0;
+  volatile char* flash_addr;
  
   switch (sector_number) {
     case 0:
@@ -495,9 +495,27 @@ void current_firmware_init(uint32_t* firmware_addr) {
  hander();
 }
 
+void swap_fw_func() {
+
+  char swap_fw[128000];
+  memset(swap_fw, 0 , sizeof(swap_fw));
+  Flash_Read((uint8_t*)swap_fw, 5);
+
+  Flash_Erase(7);
+  Flash_Program((char*)0x08060000, swap_fw, sizeof(swap_fw));
+
+  memset(swap_fw, 0 , sizeof(swap_fw));
+  Flash_Read((uint8_t*)swap_fw, 6);
+  Flash_Erase(5);
+  Flash_Program((char*)0x08020000, swap_fw, sizeof(swap_fw));
+
+}
+
+
+char msg_rec[64];
 int check_info(char* msg_check) {
  int status = 0;
- char msg_rec[sizeof(msg_check)];
+//char msg_rec[sizeof(msg_check)];
 
  memset(msg_rec, 0 , sizeof(msg_rec));
  Flash_Read((uint8_t*)msg_rec, 4);
@@ -511,16 +529,18 @@ int check_info(char* msg_check) {
    }
  }
 
- memset(msg_rec, 0, sizeof(msg_rec));
- return status;
+//memset(msg_rec, 0, sizeof(msg_rec));
+  return status;
 }
 
 
 //char new_fw[10516];
+int fw_status = 0;
+char fw_msg[] = "New firmware received!\n";
 
 int main() {
 
-  HAL_Init();
+ //HAL_Init();
   Button_Init();
   Led_Init();
   Button_Interrupt_Int();
@@ -550,7 +570,16 @@ int main() {
     // HAL_Delay(1000);
     // uart_send_string("HELLO\n");
 
-    current_firmware_init((uint32_t*)0x08020004);
+
+//	if (check_info(fw_msg))
+//		current_firmware_init((uint32_t*)0x08040004);
+//	else
+//		current_firmware_init((uint32_t*)0x08020004);
+
+	if (check_info(fw_msg))
+    swap_fw_func();
+
+	current_firmware_init((uint32_t*)0x08020004);
 
 
   }

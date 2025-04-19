@@ -17,5 +17,6 @@
 ../Core/Src/main.c:402:6:Flash_Program	40	static
 ../Core/Src/main.c:431:6:Flash_Read	32	static
 ../Core/Src/main.c:487:6:current_firmware_init	32	static
-../Core/Src/main.c:498:5:check_info	24	static
-../Core/Src/main.c:521:5:main	8	static
+../Core/Src/main.c:498:6:swap_fw_func	128008	static
+../Core/Src/main.c:516:5:check_info	24	static
+../Core/Src/main.c:541:5:main	8	static

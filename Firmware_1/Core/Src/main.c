@@ -260,20 +260,20 @@ void Flash_Program(char* flash_addr, char* data_addr, int size) {
 }
 
 // bootloader
-void current_firmware_init(uint32_t* firmware_addr) {
-  uint32_t* reset_hander_address_pointer;
-  reset_hander_address_pointer = firmware_addr;
+// void current_firmware_init(uint32_t* firmware_addr) {
+//   uint32_t* reset_hander_address_pointer;
+//   reset_hander_address_pointer = firmware_addr;
  
-  uint32_t reset_hander_address = *reset_hander_address_pointer;
+//   uint32_t reset_hander_address = *reset_hander_address_pointer;
  
-  void (*hander)();
-  hander = reset_hander_address;
-  hander();
-}
+//   void (*hander)();
+//   hander = reset_hander_address;
+//   hander();
+// }
 
-
+char new_fw[10516];
 void rec_firmware() {
-  char new_fw[10516];
+//char new_fw[10516];
 
   uart_send_string("Vui long gui firmware...\n");
 
@@ -300,10 +300,13 @@ int main() {
   Uart_Init();
 
 
-  rec_firmware();
+rec_firmware();
   while(1) {
-
-    current_firmware_init((uint32_t*)0x08040004);
+//	     Led_Ctrl(BLUE_LED, ON);
+//	     HAL_Delay(1000);
+//	     Led_Ctrl(BLUE_LED, OFF);
+//	     HAL_Delay(1000);
+  //  current_firmware_init((uint32_t*)0x08040004);
   }
 
   return 0;
