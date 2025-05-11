@@ -1,0 +1,510 @@
+01:23:37 **** Incremental Build of configuration Debug for project Firmware_1 ****
+make -j20 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'rec_firmware':
+../Core/Src/main.c:221:3: warning: implicit declaration of function 'Flash_Erase' [-Wimplicit-function-declaration]
+  221 |   Flash_Erase(6);
+      |   ^~~~~~~~~~~
+../Core/Src/main.c:222:3: warning: implicit declaration of function 'Flash_Program'; did you mean 'HAL_FLASH_Program'? [-Wimplicit-function-declaration]
+  222 |   Flash_Program((char*)0x08040000, new_fw, sizeof(new_fw));
+      |   ^~~~~~~~~~~~~
+      |   HAL_FLASH_Program
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:273:6: warning: conflicting types for 'Flash_Erase'; have 'void(int)'
+  273 | void Flash_Erase(int sector_number) {
+      |      ^~~~~~~~~~~
+../Core/Src/main.c:221:3: note: previous implicit declaration of 'Flash_Erase' with type 'void(int)'
+  221 |   Flash_Erase(6);
+      |   ^~~~~~~~~~~
+../Core/Src/main.c:302:6: warning: conflicting types for 'Flash_Program'; have 'void(char *, char *, int)'
+  302 | void Flash_Program(char* flash_addr, char* data_addr, int size) {
+      |      ^~~~~~~~~~~~~
+../Core/Src/main.c:222:3: note: previous implicit declaration of 'Flash_Program' with type 'void(char *, char *, int)'
+  222 |   Flash_Program((char*)0x08040000, new_fw, sizeof(new_fw));
+      |   ^~~~~~~~~~~~~
+arm-none-eabi-gcc -o "Firmware_1.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\Truong\STM32CubeIDE\IMIC\IMIC_EMBEDDED_MIDTERM\Firmware_1\STM32F411VETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Firmware_1.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Firmware_1.elf
+ 
+arm-none-eabi-size  Firmware_1.elf 
+arm-none-eabi-objdump -h -S Firmware_1.elf  > "Firmware_1.list"
+   text	   data	    bss	    dec	    hex	filename
+  13068	     28	  13996	  27092	   69d4	Firmware_1.elf
+arm-none-eabi-objcopy  -O binary Firmware_1.elf  "Firmware_1.bin"
+Finished building: default.size.stdout
+ 
+Finished building: Firmware_1.list
+Finished building: Firmware_1.bin
+ 
+ 
+01:23:39 **** Incremental Build of configuration Debug for project Firmware_1 ****
+make -j20 all 
+arm-none-eabi-size  Firmware_1.elf 
+   text	   data	    bss	    dec	    hex	filename
+  13068	     28	  13996	  27092	   69d4	Firmware_1.elf
+Finished building: default.size.stdout
+ 
+01:23:58 **** Incremental Build of configuration Debug for project Midterm ****
+make -j20 all 
+arm-none-eabi-size  Midterm.elf 
+   text	   data	    bss	    dec	    hex	filename
+  13600	     48	   2704	  16352	   3fe0	Midterm.elf
+Finished building: default.size.stdout
+ 
+01:26:40 **** Incremental Build of configuration Debug for project Firmware_1 ****
+make -j20 all 
+arm-none-eabi-size  Firmware_1.elf 
+   text	   data	    bss	    dec	    hex	filename
+  13068	     28	  13996	  27092	   69d4	Firmware_1.elf
+Finished building: default.size.stdout
+ 
+01:26:54 **** Incremental Build of configuration Debug for project Midterm ****
+make -j20 all 
+arm-none-eabi-size  Midterm.elf 
+   text	   data	    bss	    dec	    hex	filename
+  13600	     48	   2704	  16352	   3fe0	Midterm.elf
+Finished building: default.size.stdout
+ 
+01:33:14 **** Incremental Build of configuration Debug for project Firmware_1 ****
+make -j20 all 
+arm-none-eabi-size  Firmware_1.elf 
+   text	   data	    bss	    dec	    hex	filename
+  13068	     28	  13996	  27092	   69d4	Firmware_1.elf
+Finished building: default.size.stdout
+ 
+01:33:31 **** Incremental Build of configuration Debug for project Midterm ****
+make -j20 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'current_firmware_init':
+../Core/Src/main.c:496:9: warning: assignment to 'void (*)()' from 'uint32_t' {aka 'long unsigned int'} makes pointer from integer without a cast [-Wint-conversion]
+  496 |  hander = reset_hander_address;
+      |         ^
+../Core/Src/main.c:499:8: warning: assignment to 'uint32_t' {aka 'long unsigned int'} from 'uint32_t *' {aka 'long unsigned int *'} makes integer from pointer without a cast [-Wint-conversion]
+  499 |  *VTOR = firmware_addr;
+      |        ^
+arm-none-eabi-gcc -o "Midterm.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\Truong\STM32CubeIDE\IMIC\IMIC_EMBEDDED_MIDTERM\Midterm\STM32F411VETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Midterm.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Midterm.elf
+ 
+arm-none-eabi-size  Midterm.elf 
+arm-none-eabi-objdump -h -S Midterm.elf  > "Midterm.list"
+   text	   data	    bss	    dec	    hex	filename
+  13604	     48	   2704	  16356	   3fe4	Midterm.elf
+Finished building: default.size.stdout
+ 
+Finished building: Midterm.list
+ 
+01:37:56 **** Incremental Build of configuration Debug for project Firmware_1 ****
+make -j20 all 
+arm-none-eabi-size  Firmware_1.elf 
+   text	   data	    bss	    dec	    hex	filename
+  13068	     28	  13996	  27092	   69d4	Firmware_1.elf
+Finished building: default.size.stdout
+ 
+01:38:07 **** Incremental Build of configuration Debug for project Midterm ****
+make -j20 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'current_firmware_init':
+../Core/Src/main.c:496:9: warning: assignment to 'void (*)()' from 'uint32_t' {aka 'long unsigned int'} makes pointer from integer without a cast [-Wint-conversion]
+  496 |  hander = reset_hander_address;
+      |         ^
+../Core/Src/main.c:499:8: warning: assignment to 'uint32_t' {aka 'long unsigned int'} from 'uint32_t *' {aka 'long unsigned int *'} makes integer from pointer without a cast [-Wint-conversion]
+  499 |  *VTOR = firmware_addr;
+      |        ^
+arm-none-eabi-gcc -o "Midterm.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\Truong\STM32CubeIDE\IMIC\IMIC_EMBEDDED_MIDTERM\Midterm\STM32F411VETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Midterm.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Midterm.elf
+ 
+arm-none-eabi-size  Midterm.elf 
+arm-none-eabi-objdump -h -S Midterm.elf  > "Midterm.list"
+   text	   data	    bss	    dec	    hex	filename
+  13588	     48	 130704	 144340	  233d4	Midterm.elf
+Finished building: default.size.stdout
+ 
+Finished building: Midterm.list
+ 
+01:43:50 **** Incremental Build of configuration Debug for project Firmware_1 ****
+make -j20 all 
+arm-none-eabi-size  Firmware_1.elf 
+   text	   data	    bss	    dec	    hex	filename
+  13068	     28	  13996	  27092	   69d4	Firmware_1.elf
+Finished building: default.size.stdout
+ 
+01:44:14 **** Incremental Build of configuration Debug for project Firmware_2 ****
+make -j20 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:153:3: warning: implicit declaration of function 'Uart_Interrupt_Init'; did you mean 'Button_Interrupt_Int'? [-Wimplicit-function-declaration]
+  153 |   Uart_Interrupt_Init();
+      |   ^~~~~~~~~~~~~~~~~~~
+      |   Button_Interrupt_Int
+arm-none-eabi-gcc -o "Firmware_2.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\Truong\STM32CubeIDE\IMIC\IMIC_EMBEDDED_MIDTERM\Firmware_2\STM32F411VETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Firmware_2.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+C:/ST/STM32CubeIDE_1.17.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/main.o: in function `main':
+C:/Users/Truong/STM32CubeIDE/IMIC/IMIC_EMBEDDED_MIDTERM/Firmware_2/Debug/../Core/Src/main.c:153: undefined reference to `Uart_Interrupt_Init'
+collect2.exe: error: ld returned 1 exit status
+make: *** [makefile:71: Firmware_2.elf] Error 1
+"make -j20 all" terminated with exit code 2. Build might be incomplete.
+01:44:48 **** Incremental Build of configuration Debug for project Firmware_2 ****
+make -j20 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "Firmware_2.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\Truong\STM32CubeIDE\IMIC\IMIC_EMBEDDED_MIDTERM\Firmware_2\STM32F411VETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Firmware_2.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Firmware_2.elf
+ 
+arm-none-eabi-size  Firmware_2.elf 
+arm-none-eabi-objdump -h -S Firmware_2.elf  > "Firmware_2.list"
+   text	   data	    bss	    dec	    hex	filename
+  11808	     24	   2568	  14400	   3840	Firmware_2.elf
+arm-none-eabi-objcopy  -O binary Firmware_2.elf  "Firmware_2.bin"
+Finished building: default.size.stdout
+ 
+Finished building: Firmware_2.list
+Finished building: Firmware_2.bin
+ 
+ 
+01:44:50 **** Incremental Build of configuration Debug for project Firmware_2 ****
+make -j20 all 
+arm-none-eabi-size  Firmware_2.elf 
+   text	   data	    bss	    dec	    hex	filename
+  11808	     24	   2568	  14400	   3840	Firmware_2.elf
+Finished building: default.size.stdout
+ 
+01:45:56 **** Incremental Build of configuration Debug for project Firmware_1 ****
+make -j20 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'rec_firmware':
+../Core/Src/main.c:221:3: warning: implicit declaration of function 'Flash_Erase' [-Wimplicit-function-declaration]
+  221 |   Flash_Erase(6);
+      |   ^~~~~~~~~~~
+../Core/Src/main.c:222:3: warning: implicit declaration of function 'Flash_Program'; did you mean 'HAL_FLASH_Program'? [-Wimplicit-function-declaration]
+  222 |   Flash_Program((char*)0x08040000, new_fw, sizeof(new_fw));
+      |   ^~~~~~~~~~~~~
+      |   HAL_FLASH_Program
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:273:6: warning: conflicting types for 'Flash_Erase'; have 'void(int)'
+  273 | void Flash_Erase(int sector_number) {
+      |      ^~~~~~~~~~~
+../Core/Src/main.c:221:3: note: previous implicit declaration of 'Flash_Erase' with type 'void(int)'
+  221 |   Flash_Erase(6);
+      |   ^~~~~~~~~~~
+../Core/Src/main.c:302:6: warning: conflicting types for 'Flash_Program'; have 'void(char *, char *, int)'
+  302 | void Flash_Program(char* flash_addr, char* data_addr, int size) {
+      |      ^~~~~~~~~~~~~
+../Core/Src/main.c:222:3: note: previous implicit declaration of 'Flash_Program' with type 'void(char *, char *, int)'
+  222 |   Flash_Program((char*)0x08040000, new_fw, sizeof(new_fw));
+      |   ^~~~~~~~~~~~~
+arm-none-eabi-gcc -o "Firmware_1.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\Truong\STM32CubeIDE\IMIC\IMIC_EMBEDDED_MIDTERM\Firmware_1\STM32F411VETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Firmware_1.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Firmware_1.elf
+ 
+arm-none-eabi-size  Firmware_1.elf 
+arm-none-eabi-objdump -h -S Firmware_1.elf  > "Firmware_1.list"
+   text	   data	    bss	    dec	    hex	filename
+  13072	     28	  14436	  27536	   6b90	Firmware_1.elf
+arm-none-eabi-objcopy  -O binary Firmware_1.elf  "Firmware_1.bin"
+Finished building: default.size.stdout
+ 
+Finished building: Firmware_1.list
+Finished building: Firmware_1.bin
+ 
+ 
+01:46:09 **** Incremental Build of configuration Debug for project Midterm ****
+make -j20 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'current_firmware_init':
+../Core/Src/main.c:496:9: warning: assignment to 'void (*)()' from 'uint32_t' {aka 'long unsigned int'} makes pointer from integer without a cast [-Wint-conversion]
+  496 |  hander = reset_hander_address;
+      |         ^
+../Core/Src/main.c:499:8: warning: assignment to 'uint32_t' {aka 'long unsigned int'} from 'uint32_t *' {aka 'long unsigned int *'} makes integer from pointer without a cast [-Wint-conversion]
+  499 |  *VTOR = firmware_addr;
+      |        ^
+arm-none-eabi-gcc -o "Midterm.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\Truong\STM32CubeIDE\IMIC\IMIC_EMBEDDED_MIDTERM\Midterm\STM32F411VETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Midterm.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Midterm.elf
+ 
+arm-none-eabi-size  Midterm.elf 
+arm-none-eabi-objdump -h -S Midterm.elf  > "Midterm.list"
+   text	   data	    bss	    dec	    hex	filename
+  13636	     48	 130704	 144388	  23404	Midterm.elf
+Finished building: default.size.stdout
+ 
+Finished building: Midterm.list
+ 
+01:46:25 **** Incremental Build of configuration Debug for project Firmware_1 ****
+make -j20 all 
+arm-none-eabi-size  Firmware_1.elf 
+   text	   data	    bss	    dec	    hex	filename
+  13072	     28	  14436	  27536	   6b90	Firmware_1.elf
+Finished building: default.size.stdout
+ 
+01:46:37 **** Incremental Build of configuration Debug for project Midterm ****
+make -j20 all 
+arm-none-eabi-size  Midterm.elf 
+   text	   data	    bss	    dec	    hex	filename
+  13636	     48	 130704	 144388	  23404	Midterm.elf
+Finished building: default.size.stdout
+ 
+01:53:14 **** Incremental Build of configuration Debug for project Firmware_1 ****
+make -j20 all 
+arm-none-eabi-size  Firmware_1.elf 
+   text	   data	    bss	    dec	    hex	filename
+  13072	     28	  14436	  27536	   6b90	Firmware_1.elf
+Finished building: default.size.stdout
+ 
+01:53:25 **** Incremental Build of configuration Debug for project Midterm ****
+make -j20 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'current_firmware_init':
+../Core/Src/main.c:498:9: warning: assignment to 'void (*)()' from 'uint32_t' {aka 'long unsigned int'} makes pointer from integer without a cast [-Wint-conversion]
+  498 |  hander = reset_hander_address;
+      |         ^
+../Core/Src/main.c:501:8: warning: assignment to 'uint32_t' {aka 'long unsigned int'} from 'uint32_t *' {aka 'long unsigned int *'} makes integer from pointer without a cast [-Wint-conversion]
+  501 |  *VTOR = firmware_addr;
+      |        ^
+arm-none-eabi-gcc -o "Midterm.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\Truong\STM32CubeIDE\IMIC\IMIC_EMBEDDED_MIDTERM\Midterm\STM32F411VETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Midterm.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Midterm.elf
+ 
+arm-none-eabi-size  Midterm.elf 
+arm-none-eabi-objdump -h -S Midterm.elf  > "Midterm.list"
+   text	   data	    bss	    dec	    hex	filename
+  12800	     24	   2640	  15464	   3c68	Midterm.elf
+Finished building: default.size.stdout
+ 
+Finished building: Midterm.list
+ 
+01:54:19 **** Incremental Build of configuration Debug for project Midterm ****
+make -j20 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'current_firmware_init':
+../Core/Src/main.c:498:9: warning: assignment to 'void (*)()' from 'uint32_t' {aka 'long unsigned int'} makes pointer from integer without a cast [-Wint-conversion]
+  498 |  hander = reset_hander_address;
+      |         ^
+../Core/Src/main.c:501:8: warning: assignment to 'uint32_t' {aka 'long unsigned int'} from 'uint32_t *' {aka 'long unsigned int *'} makes integer from pointer without a cast [-Wint-conversion]
+  501 |  *VTOR = firmware_addr;
+      |        ^
+arm-none-eabi-gcc -o "Midterm.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\Truong\STM32CubeIDE\IMIC\IMIC_EMBEDDED_MIDTERM\Midterm\STM32F411VETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Midterm.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Midterm.elf
+ 
+arm-none-eabi-size  Midterm.elf 
+arm-none-eabi-objdump -h -S Midterm.elf  > "Midterm.list"
+   text	   data	    bss	    dec	    hex	filename
+  13228	     48	   2704	  15980	   3e6c	Midterm.elf
+Finished building: default.size.stdout
+ 
+Finished building: Midterm.list
+ 
+03:08:40 **** Incremental Build of configuration Debug for project Firmware_2 ****
+make -j20 all 
+arm-none-eabi-gcc -o "Firmware_2.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\Truong\STM32CubeIDE\IMIC\IMIC_EMBEDDED_MIDTERM\Firmware_2\STM32F411VETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Firmware_2.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Firmware_2.elf
+ 
+arm-none-eabi-size  Firmware_2.elf 
+arm-none-eabi-objdump -h -S Firmware_2.elf  > "Firmware_2.list"
+   text	   data	    bss	    dec	    hex	filename
+  11808	     24	   2568	  14400	   3840	Firmware_2.elf
+arm-none-eabi-objcopy  -O binary Firmware_2.elf  "Firmware_2.bin"
+Finished building: default.size.stdout
+ 
+Finished building: Firmware_2.list
+Finished building: Firmware_2.bin
+ 
+ 
+03:08:58 **** Incremental Build of configuration Debug for project Firmware_1 ****
+make -j20 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'rec_firmware':
+../Core/Src/main.c:221:3: warning: implicit declaration of function 'Flash_Erase' [-Wimplicit-function-declaration]
+  221 |   Flash_Erase(6);
+      |   ^~~~~~~~~~~
+../Core/Src/main.c:222:3: warning: implicit declaration of function 'Flash_Program'; did you mean 'HAL_FLASH_Program'? [-Wimplicit-function-declaration]
+  222 |   Flash_Program((char*)0x08040000, new_fw, sizeof(new_fw));
+      |   ^~~~~~~~~~~~~
+      |   HAL_FLASH_Program
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:273:6: warning: conflicting types for 'Flash_Erase'; have 'void(int)'
+  273 | void Flash_Erase(int sector_number) {
+      |      ^~~~~~~~~~~
+../Core/Src/main.c:221:3: note: previous implicit declaration of 'Flash_Erase' with type 'void(int)'
+  221 |   Flash_Erase(6);
+      |   ^~~~~~~~~~~
+../Core/Src/main.c:302:6: warning: conflicting types for 'Flash_Program'; have 'void(char *, char *, int)'
+  302 | void Flash_Program(char* flash_addr, char* data_addr, int size) {
+      |      ^~~~~~~~~~~~~
+../Core/Src/main.c:222:3: note: previous implicit declaration of 'Flash_Program' with type 'void(char *, char *, int)'
+  222 |   Flash_Program((char*)0x08040000, new_fw, sizeof(new_fw));
+      |   ^~~~~~~~~~~~~
+../Core/Src/main.c: In function 'current_firmware_init':
+../Core/Src/main.c:341:9: warning: assignment to 'void (*)()' from 'uint32_t' {aka 'long unsigned int'} makes pointer from integer without a cast [-Wint-conversion]
+  341 |  hander = reset_hander_address;
+      |         ^
+../Core/Src/main.c:344:8: warning: assignment to 'uint32_t' {aka 'long unsigned int'} from 'uint32_t *' {aka 'long unsigned int *'} makes integer from pointer without a cast [-Wint-conversion]
+  344 |  *VTOR = firmware_addr;
+      |        ^
+arm-none-eabi-gcc -o "Firmware_1.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\Truong\STM32CubeIDE\IMIC\IMIC_EMBEDDED_MIDTERM\Firmware_1\STM32F411VETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Firmware_1.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Firmware_1.elf
+ 
+arm-none-eabi-size  Firmware_1.elf 
+arm-none-eabi-objdump -h -S Firmware_1.elf  > "Firmware_1.list"
+   text	   data	    bss	    dec	    hex	filename
+  13140	     28	  14436	  27604	   6bd4	Firmware_1.elf
+arm-none-eabi-objcopy  -O binary Firmware_1.elf  "Firmware_1.bin"
+Finished building: default.size.stdout
+ 
+Finished building: Firmware_1.list
+Finished building: Firmware_1.bin
+ 
+ 
+03:09:15 **** Incremental Build of configuration Debug for project Midterm ****
+make -j20 all 
+arm-none-eabi-size  Midterm.elf 
+   text	   data	    bss	    dec	    hex	filename
+  13228	     48	   2704	  15980	   3e6c	Midterm.elf
+Finished building: default.size.stdout
+ 
+03:10:47 **** Incremental Build of configuration Debug for project Firmware_1 ****
+make -j20 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'current_firmware_init':
+../Core/Src/main.c:220:9: warning: assignment to 'void (*)()' from 'uint32_t' {aka 'long unsigned int'} makes pointer from integer without a cast [-Wint-conversion]
+  220 |  hander = reset_hander_address;
+      |         ^
+../Core/Src/main.c:223:8: warning: assignment to 'uint32_t' {aka 'long unsigned int'} from 'uint32_t *' {aka 'long unsigned int *'} makes integer from pointer without a cast [-Wint-conversion]
+  223 |  *VTOR = firmware_addr;
+      |        ^
+../Core/Src/main.c: In function 'rec_firmware':
+../Core/Src/main.c:238:3: warning: implicit declaration of function 'Flash_Erase' [-Wimplicit-function-declaration]
+  238 |   Flash_Erase(6);
+      |   ^~~~~~~~~~~
+../Core/Src/main.c:239:3: warning: implicit declaration of function 'Flash_Program'; did you mean 'HAL_FLASH_Program'? [-Wimplicit-function-declaration]
+  239 |   Flash_Program((char*)0x08040000, new_fw, sizeof(new_fw));
+      |   ^~~~~~~~~~~~~
+      |   HAL_FLASH_Program
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:292:6: warning: conflicting types for 'Flash_Erase'; have 'void(int)'
+  292 | void Flash_Erase(int sector_number) {
+      |      ^~~~~~~~~~~
+../Core/Src/main.c:238:3: note: previous implicit declaration of 'Flash_Erase' with type 'void(int)'
+  238 |   Flash_Erase(6);
+      |   ^~~~~~~~~~~
+../Core/Src/main.c:321:6: warning: conflicting types for 'Flash_Program'; have 'void(char *, char *, int)'
+  321 | void Flash_Program(char* flash_addr, char* data_addr, int size) {
+      |      ^~~~~~~~~~~~~
+../Core/Src/main.c:239:3: note: previous implicit declaration of 'Flash_Program' with type 'void(char *, char *, int)'
+  239 |   Flash_Program((char*)0x08040000, new_fw, sizeof(new_fw));
+      |   ^~~~~~~~~~~~~
+arm-none-eabi-gcc -o "Firmware_1.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\Truong\STM32CubeIDE\IMIC\IMIC_EMBEDDED_MIDTERM\Firmware_1\STM32F411VETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Firmware_1.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Firmware_1.elf
+ 
+arm-none-eabi-size  Firmware_1.elf 
+arm-none-eabi-objdump -h -S Firmware_1.elf  > "Firmware_1.list"
+   text	   data	    bss	    dec	    hex	filename
+  13136	     28	  14436	  27600	   6bd0	Firmware_1.elf
+arm-none-eabi-objcopy  -O binary Firmware_1.elf  "Firmware_1.bin"
+Finished building: default.size.stdout
+ 
+Finished building: Firmware_1.list
+Finished building: Firmware_1.bin
+ 
+ 
+03:10:59 **** Incremental Build of configuration Debug for project Midterm ****
+make -j20 all 
+arm-none-eabi-size  Midterm.elf 
+   text	   data	    bss	    dec	    hex	filename
+  13228	     48	   2704	  15980	   3e6c	Midterm.elf
+Finished building: default.size.stdout
+ 
+03:14:18 **** Incremental Build of configuration Debug for project Midterm ****
+make -j20 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'current_firmware_init':
+../Core/Src/main.c:498:9: warning: assignment to 'void (*)()' from 'uint32_t' {aka 'long unsigned int'} makes pointer from integer without a cast [-Wint-conversion]
+  498 |  hander = reset_hander_address;
+      |         ^
+../Core/Src/main.c:501:8: warning: assignment to 'uint32_t' {aka 'long unsigned int'} from 'uint32_t *' {aka 'long unsigned int *'} makes integer from pointer without a cast [-Wint-conversion]
+  501 |  *VTOR = firmware_addr;
+      |        ^
+arm-none-eabi-gcc -o "Midterm.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\Truong\STM32CubeIDE\IMIC\IMIC_EMBEDDED_MIDTERM\Midterm\STM32F411VETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Midterm.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Midterm.elf
+ 
+arm-none-eabi-size  Midterm.elf 
+arm-none-eabi-objdump -h -S Midterm.elf  > "Midterm.list"
+   text	   data	    bss	    dec	    hex	filename
+  13288	     48	   2704	  16040	   3ea8	Midterm.elf
+Finished building: default.size.stdout
+ 
+Finished building: Midterm.list
+ 
+03:15:24 **** Incremental Build of configuration Debug for project Firmware_1 ****
+make -j20 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'current_firmware_init':
+../Core/Src/main.c:220:9: warning: assignment to 'void (*)()' from 'uint32_t' {aka 'long unsigned int'} makes pointer from integer without a cast [-Wint-conversion]
+  220 |  hander = reset_hander_address;
+      |         ^
+../Core/Src/main.c:223:8: warning: assignment to 'uint32_t' {aka 'long unsigned int'} from 'uint32_t *' {aka 'long unsigned int *'} makes integer from pointer without a cast [-Wint-conversion]
+  223 |  *VTOR = firmware_addr;
+      |        ^
+../Core/Src/main.c: In function 'rec_firmware':
+../Core/Src/main.c:238:3: warning: implicit declaration of function 'Flash_Erase' [-Wimplicit-function-declaration]
+  238 |   Flash_Erase(6);
+      |   ^~~~~~~~~~~
+../Core/Src/main.c:239:3: warning: implicit declaration of function 'Flash_Program'; did you mean 'HAL_FLASH_Program'? [-Wimplicit-function-declaration]
+  239 |   Flash_Program((char*)0x08040000, new_fw, sizeof(new_fw));
+      |   ^~~~~~~~~~~~~
+      |   HAL_FLASH_Program
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:290:6: warning: conflicting types for 'Flash_Erase'; have 'void(int)'
+  290 | void Flash_Erase(int sector_number) {
+      |      ^~~~~~~~~~~
+../Core/Src/main.c:238:3: note: previous implicit declaration of 'Flash_Erase' with type 'void(int)'
+  238 |   Flash_Erase(6);
+      |   ^~~~~~~~~~~
+../Core/Src/main.c:319:6: warning: conflicting types for 'Flash_Program'; have 'void(char *, char *, int)'
+  319 | void Flash_Program(char* flash_addr, char* data_addr, int size) {
+      |      ^~~~~~~~~~~~~
+../Core/Src/main.c:239:3: note: previous implicit declaration of 'Flash_Program' with type 'void(char *, char *, int)'
+  239 |   Flash_Program((char*)0x08040000, new_fw, sizeof(new_fw));
+      |   ^~~~~~~~~~~~~
+arm-none-eabi-gcc -o "Firmware_1.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\Truong\STM32CubeIDE\IMIC\IMIC_EMBEDDED_MIDTERM\Firmware_1\STM32F411VETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Firmware_1.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Firmware_1.elf
+ 
+arm-none-eabi-size  Firmware_1.elf 
+arm-none-eabi-objdump -h -S Firmware_1.elf  > "Firmware_1.list"
+   text	   data	    bss	    dec	    hex	filename
+  13072	     28	  14436	  27536	   6b90	Firmware_1.elf
+arm-none-eabi-objcopy  -O binary Firmware_1.elf  "Firmware_1.bin"
+Finished building: default.size.stdout
+ 
+Finished building: Firmware_1.list
+Finished building: Firmware_1.bin
+ 
+ 
+03:15:38 **** Incremental Build of configuration Debug for project Midterm ****
+make -j20 all 
+arm-none-eabi-size  Midterm.elf 
+   text	   data	    bss	    dec	    hex	filename
+  13288	     48	   2704	  16040	   3ea8	Midterm.elf
+Finished building: default.size.stdout
+ 
+03:17:09 **** Incremental Build of configuration Debug for project Firmware_1 ****
+make -j20 all 
+arm-none-eabi-size  Firmware_1.elf 
+   text	   data	    bss	    dec	    hex	filename
+  13072	     28	  14436	  27536	   6b90	Firmware_1.elf
+Finished building: default.size.stdout
+ 
+03:17:32 **** Incremental Build of configuration Debug for project Midterm ****
+make -j20 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'current_firmware_init':
+../Core/Src/main.c:498:9: warning: assignment to 'void (*)()' from 'uint32_t' {aka 'long unsigned int'} makes pointer from integer without a cast [-Wint-conversion]
+  498 |  hander = reset_hander_address;
+      |         ^
+../Core/Src/main.c:501:8: warning: assignment to 'uint32_t' {aka 'long unsigned int'} from 'uint32_t *' {aka 'long unsigned int *'} makes integer from pointer without a cast [-Wint-conversion]
+  501 |  *VTOR = firmware_addr;
+      |        ^
+arm-none-eabi-gcc -o "Midterm.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\Truong\STM32CubeIDE\IMIC\IMIC_EMBEDDED_MIDTERM\Midterm\STM32F411VETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Midterm.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Midterm.elf
+ 
+arm-none-eabi-size  Midterm.elf 
+arm-none-eabi-objdump -h -S Midterm.elf  > "Midterm.list"
+   text	   data	    bss	    dec	    hex	filename
+  13644	     48	 130704	 144396	  2340c	Midterm.elf
+Finished building: default.size.stdout
+ 
+Finished building: Midterm.list
+ 

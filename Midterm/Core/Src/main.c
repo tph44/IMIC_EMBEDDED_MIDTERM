@@ -428,8 +428,10 @@ void Flash_Program(char* flash_addr, char* data_addr, int size) {
   while (((*FL_SR >> 16 ) & 1) == 1);
 }
 
+volatile uint32_t read_data_buffer;
+
 void Flash_Read(uint8_t* data, int sector_number) {
-  volatile uint32_t read_data_buffer;
+
   volatile uint32_t read_cnt = 0;
   volatile char* flash_addr;
  
@@ -484,20 +486,25 @@ void Flash_Read(uint8_t* data, int sector_number) {
 }
 
 // bootloader
-void current_firmware_init(uint32_t* firmware_addr) {
+void current_firmware_init(uint32_t* firmware_addr, uint32_t* tmp) {
  uint32_t* reset_hander_address_pointer;
- reset_hander_address_pointer = firmware_addr;
+
+
+ reset_hander_address_pointer = (uint32_t*)(tmp);
 
  uint32_t reset_hander_address = *reset_hander_address_pointer;
 
  void (*hander)();
  hander = reset_hander_address;
+
+ uint32_t* VTOR = (uint32_t*)0xE000ED08;
+ *VTOR = firmware_addr;
  hander();
 }
 
+char swap_fw[128000];
 void swap_fw_func() {
 
-  char swap_fw[128000];
   memset(swap_fw, 0 , sizeof(swap_fw));
   Flash_Read((uint8_t*)swap_fw, 5);
 
@@ -510,6 +517,8 @@ void swap_fw_func() {
   Flash_Program((char*)0x08020000, swap_fw, sizeof(swap_fw));
 
   uart_send_string("Firmwares SWAPPED!\n");
+  Flash_Erase(4);
+  uart_send_string("BOOTLOADER - Erased sector 4\n");
 
 }
 
@@ -519,8 +528,12 @@ int check_info(char* msg_check) {
  int status = 0;
 //char msg_rec[sizeof(msg_check)];
 
- memset(msg_rec, 0 , sizeof(msg_rec));
+ uart_send_string("Checking sector 4 \n");
+
+//memset(msg_rec, 0 , sizeof(msg_rec));
  Flash_Read((uint8_t*)msg_rec, 4);
+
+ uart_send_string("Finished reading sector 4 \n");
 
  if (strstr(msg_rec, "\n")) {
    if (strstr((char*)msg_rec, msg_check)) {
@@ -532,6 +545,7 @@ int check_info(char* msg_check) {
  }
 
 //memset(msg_rec, 0, sizeof(msg_rec));
+  uart_send_string("Finished checking sector 4 \n");
   return status;
 }
 
@@ -547,7 +561,7 @@ int main() {
   Led_Init();
   Button_Interrupt_Int();
   Uart_Init();
-//Uart_Interrupt_Init();
+Uart_Interrupt_Init();
 //DMA_Uart1_RX_Init();
 //Flash_Erase(1);
 //char msg[] = "Hello World!\n";
@@ -564,24 +578,28 @@ int main() {
   // Flash_Erase(6);
   // Flash_Program((char*)0x08040000, new_fw, sizeof(new_fw));
   
+  uart_send_string("BOOTLEADER!!!!!\n");
 
   while(1) {
-//     Led_Ctrl(BLUE_LED, ON);
-//     HAL_Delay(1000);
-//     Led_Ctrl(BLUE_LED, OFF);
-//     HAL_Delay(1000);
-    // uart_send_string("HELLO\n");
+     Led_Ctrl(BLUE_LED, ON);
+     HAL_Delay(1000);
+     Led_Ctrl(BLUE_LED, OFF);
+     HAL_Delay(1000);
+     uart_send_string("HELLO\n");
 
 
-//	if (check_info(fw_msg))
-//		current_firmware_init((uint32_t*)0x08040004);
-//	else
-//		current_firmware_init((uint32_t*)0x08020004);
+ 	// if (check_info(fw_msg)) {
+  //   uart_send_string("BL - Running FW2\n");
+ 	// 	current_firmware_init((uint32_t*)0x08040000, (uint32_t*)0x08040004);
+  // } else {
+  //   uart_send_string("BL - Running FW1\n");
+ 	// 	current_firmware_init((uint32_t*)0x08020000, (uint32_t*)0x08020004);
+  // }
 
-  if (check_info(fw_msg))
-    swap_fw_func();
+    if (check_info(fw_msg))
+      swap_fw_func();
 
-  current_firmware_init((uint32_t*)0x08020004);
+  current_firmware_init((uint32_t*)0x08020000, (uint32_t*)0x08020004);
 
 
   }

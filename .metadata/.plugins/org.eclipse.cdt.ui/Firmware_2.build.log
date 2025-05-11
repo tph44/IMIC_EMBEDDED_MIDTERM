@@ -1,0 +1,19 @@
+03:08:40 **** Incremental Build of configuration Debug for project Firmware_2 ****
+make -j20 all 
+arm-none-eabi-gcc -o "Firmware_2.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\Truong\STM32CubeIDE\IMIC\IMIC_EMBEDDED_MIDTERM\Firmware_2\STM32F411VETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Firmware_2.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Firmware_2.elf
+ 
+arm-none-eabi-size  Firmware_2.elf 
+arm-none-eabi-objdump -h -S Firmware_2.elf  > "Firmware_2.list"
+   text	   data	    bss	    dec	    hex	filename
+  11808	     24	   2568	  14400	   3840	Firmware_2.elf
+arm-none-eabi-objcopy  -O binary Firmware_2.elf  "Firmware_2.bin"
+Finished building: default.size.stdout
+ 
+Finished building: Firmware_2.list
+Finished building: Firmware_2.bin
+ 
+ 
+
+03:08:41 Build Finished. 0 errors, 0 warnings. (took 627ms)
+

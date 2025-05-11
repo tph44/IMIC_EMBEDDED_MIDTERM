@@ -1,0 +1,24 @@
+03:17:32 **** Incremental Build of configuration Debug for project Midterm ****
+make -j20 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'current_firmware_init':
+../Core/Src/main.c:498:9: warning: assignment to 'void (*)()' from 'uint32_t' {aka 'long unsigned int'} makes pointer from integer without a cast [-Wint-conversion]
+  498 |  hander = reset_hander_address;
+      |         ^
+../Core/Src/main.c:501:8: warning: assignment to 'uint32_t' {aka 'long unsigned int'} from 'uint32_t *' {aka 'long unsigned int *'} makes integer from pointer without a cast [-Wint-conversion]
+  501 |  *VTOR = firmware_addr;
+      |        ^
+arm-none-eabi-gcc -o "Midterm.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\Truong\STM32CubeIDE\IMIC\IMIC_EMBEDDED_MIDTERM\Midterm\STM32F411VETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Midterm.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Midterm.elf
+ 
+arm-none-eabi-size  Midterm.elf 
+arm-none-eabi-objdump -h -S Midterm.elf  > "Midterm.list"
+   text	   data	    bss	    dec	    hex	filename
+  13644	     48	 130704	 144396	  2340c	Midterm.elf
+Finished building: default.size.stdout
+ 
+Finished building: Midterm.list
+ 
+
+03:17:33 Build Finished. 0 errors, 2 warnings. (took 768ms)
+

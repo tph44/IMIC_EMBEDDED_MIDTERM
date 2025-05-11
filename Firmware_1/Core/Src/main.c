@@ -197,6 +197,92 @@ char uart_receive_one_byte()
 	return *USART_DR;
 }
 
+void Uart_Interrupt_Init() {
+
+  uint32_t* USART_CR1 = (uint32_t*)(USART1_BASE_ADDR + 0x0C);
+  *USART_CR1 |= (0b1 << 5);
+
+  uint32_t* ISER1 = (uint32_t*)(ISER_BASE_ADDR + 0x04);
+  *ISER1 |= (0b1 << 5);
+  
+}
+
+// bootloader
+void current_firmware_init(uint32_t* firmware_addr, uint32_t* tmp) {
+ uint32_t* reset_hander_address_pointer;
+
+
+ reset_hander_address_pointer = (uint32_t*)(tmp);
+
+ uint32_t reset_hander_address = *reset_hander_address_pointer;
+
+ void (*hander)();
+ hander = reset_hander_address;
+
+ uint32_t* VTOR = (uint32_t*)0xE000ED08;
+ *VTOR = firmware_addr;
+ hander();
+}
+
+char new_fw[11832];
+void rec_firmware() {
+//char new_fw[10516];
+
+  uart_send_string("Vui long gui firmware...\n");
+
+  for (int i = 0; i < sizeof(new_fw); i++) {
+    new_fw[i] = uart_receive_one_byte();
+  }
+
+  uart_send_string("Da nhan duoc firmware...\n");
+  Flash_Erase(6);
+  Flash_Program((char*)0x08040000, new_fw, sizeof(new_fw));
+
+  char fw_msg[] = "New firmware received!\n";
+	Flash_Erase(4);
+	Flash_Program((char*)0x08010000, fw_msg, sizeof(fw_msg));
+  uart_send_string("FW1 - Updated sector 4\n");
+}
+
+
+char cmd[32];
+int cmd_index;
+
+void USART1_IRQHandler() {
+  // char data = uart_receive_one_byte();
+  // if(data == 'x')
+  //   Led_Ctrl(ORANGE_LED, ON);
+  // else if(data == 'o')
+  //   Led_Ctrl(ORANGE_LED, OFF);
+
+  // $0a
+
+  cmd[cmd_index] = uart_receive_one_byte();
+  cmd_index++;
+  if (strstr(cmd, "\n")) {
+    if (strstr(cmd, "update firmware")) {
+      uart_send_string("Start updating fw!\n");
+      rec_firmware();
+    } else if (strstr(cmd, "led red on")) {
+      Led_Ctrl(RED_LED, ON);
+      uart_send_string("Da bat led DO\n");
+    } else if (strstr(cmd, "led red off")) {
+      Led_Ctrl(RED_LED, OFF);
+      uart_send_string("Da tat led DO\n");
+    } else if (strstr(cmd, "led blue on")) {
+      Led_Ctrl(BLUE_LED, ON);
+      uart_send_string("Da bat led XANH\n");
+    } else if (strstr(cmd, "led red off")) {
+      Led_Ctrl(BLUE_LED, OFF);
+      uart_send_string("Da tat led XANH\n");
+    } else
+      uart_send_string("Khong tiem thay command\n");
+
+    memset(cmd, 0, 32);
+    cmd_index = 0;
+  }
+}
+
 #define FLASH_BASE_ADDR 0x40023C00
 #define KEY1            0x45670123
 #define KEY2            0xCDEF89AB
@@ -259,38 +345,6 @@ void Flash_Program(char* flash_addr, char* data_addr, int size) {
   while (((*FL_SR >> 16 ) & 1) == 1);
 }
 
-// bootloader
-// void current_firmware_init(uint32_t* firmware_addr) {
-//   uint32_t* reset_hander_address_pointer;
-//   reset_hander_address_pointer = firmware_addr;
- 
-//   uint32_t reset_hander_address = *reset_hander_address_pointer;
- 
-//   void (*hander)();
-//   hander = reset_hander_address;
-//   hander();
-// }
-
-char new_fw[10516];
-void rec_firmware() {
-//char new_fw[10516];
-
-  uart_send_string("Vui long gui firmware...\n");
-
-  for (int i = 0; i < sizeof(new_fw); i++) {
-    new_fw[i] = uart_receive_one_byte();
-  }
-
-  uart_send_string("Da nhan duoc firmware...\n");
-  Flash_Erase(6);
-  Flash_Program((char*)0x08040000, new_fw, sizeof(new_fw));
-
-  char fw_msg[] = "New firmware received!\n";
-	Flash_Erase(4);
-	Flash_Program((char*)0x08010000, fw_msg, sizeof(fw_msg));
-}
-
-
 int main() {
 
   HAL_Init();
@@ -298,15 +352,19 @@ int main() {
   Led_Init();
   Button_Interrupt_Int();
   Uart_Init();
+  Uart_Interrupt_Init();
+
+  uart_send_string("Firmware 1 ON!\n");
 
 
-rec_firmware();
+// rec_firmware();
   while(1) {
-//	     Led_Ctrl(BLUE_LED, ON);
-//	     HAL_Delay(1000);
-//	     Led_Ctrl(BLUE_LED, OFF);
-//	     HAL_Delay(1000);
-  //  current_firmware_init((uint32_t*)0x08040004);
+
+	     Led_Ctrl(GREEN_LED, ON);
+	     HAL_Delay(1000);
+	     Led_Ctrl(GREEN_LED, OFF);
+	     HAL_Delay(1000);
+
   }
 
   return 0;

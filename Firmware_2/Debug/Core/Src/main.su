@@ -4,4 +4,7 @@
 ../Core/Src/main.c:45:5:Button_Status	16	static
 ../Core/Src/main.c:53:6:Button_Interrupt_Int	24	static
 ../Core/Src/main.c:78:6:EXTI0_IRQHandler	24	static
-../Core/Src/main.c:87:5:main	8	static
+../Core/Src/main.c:91:6:Uart_Init	32	static
+../Core/Src/main.c:123:6:uart_send_one_byte	24	static
+../Core/Src/main.c:135:6:uart_send_string	24	static
+../Core/Src/main.c:146:5:main	8	static
